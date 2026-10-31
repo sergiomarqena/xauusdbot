@@ -1,74 +1,73 @@
 # NORDXAU.GPT
 
-**A research-first XAU/USD market intelligence workspace.**
+**Read-only, research-first market intelligence console.**
 
-NORDXAU.GPT is designed to collect market data, calculate transparent indicators, label market regimes, preserve research runs, and evaluate ideas with reproducible historical tests and paper simulation.
+NORDXAU.GPT brings together XAU/USD candles (when a Twelve Data key is configured), public macroeconomic series, selected crypto spot snapshots, and official U.S. policy/economic RSS headlines.
 
-> **Current stage:** foundation scaffold. Without a configured data provider the app serves clearly labelled deterministic demo data. Demo data is not a market quote.
+## Current capabilities
 
-## What this project is — and is not
+- XAU/USD OHLC history and EMA 20 / EMA 50 / RSI 14 / ATR 14 measurements through Twelve Data.
+- FRED macro observations: broad trade-weighted USD index (DTWEXBGS), 10-year nominal Treasury yield (DGS10), 10-year real Treasury yield (DFII10), and WTI crude (DCOILWTICO).
+- Public Binance 24-hour spot ticker snapshots for BTC/USDT and ETH/USDT.
+- Official Federal Reserve press-release and BLS latest-number RSS headlines.
+- Cached source responses with source labels, timestamps, and visible unavailable states.
+- Responsive browser terminal and read-only JSON API.
 
-- A modular market-data and research platform, beginning with XAU/USD.
-- Built to keep raw data, derived features, research hypotheses, and evaluation results separate.
-- Designed for historical replay and paper simulation before any conclusions are drawn.
-- Not a broker, exchange, order router, investment adviser, or autonomous trading system.
-- No live order-placement code, broker credentials, or real-money execution path is included.
+## Data setup
 
-## Repository layout
+The dashboard intentionally does not invent a Gold price. To connect the Gold feed:
 
-```text
-backend/   FastAPI service, data adapters, indicators, tests
-frontend/  Lightweight browser dashboard served by FastAPI
-docs/      Architecture, data contracts, validation policy, roadmap
-```
+1. Open the nordxau-gpt service in Railway.
+2. Add service variable TWELVE_DATA_API_KEY with your own Twelve Data key.
+3. Keep DATA_PROVIDER=twelvedata (the application default), then redeploy/restart the service if Railway does not redeploy automatically.
 
-## Run locally (Windows PowerShell)
+Local setup: copy .env.example to .env, set the key, then run the backend as described below.
 
-```powershell
+~~~powershell
 cd backend
 py -m venv .venv
-.\.venv\Scripts\Activate.ps1
+.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
-Copy-Item ..\.env.example ..\.env
 uvicorn app.main:app --reload
-```
+~~~
 
-Open `http://127.0.0.1:8000`. API docs: `http://127.0.0.1:8000/docs`.
+Dashboard: http://127.0.0.1:8000  
+API schema: http://127.0.0.1:8000/docs
 
-To enable the Twelve Data adapter, put your own key in the root `.env` file:
+To inspect the rest of the terminal without a Gold key, the macro, crypto and official RSS panels can still load independently. To deliberately inspect the deterministic illustrative candle feed locally, set DATA_PROVIDER=demo; it is always labelled DEMO DATA.
 
-```env
-DATA_PROVIDER=twelvedata
-TWELVE_DATA_API_KEY=your_key_here
-DEFAULT_SYMBOL=XAU/USD
-DEFAULT_INTERVAL=1h
-```
+## API routes
 
-Never commit `.env`, API keys, account credentials, or personal data. Twelve Data endpoint documentation: https://twelvedata.com/docs
+- GET /health
+- GET /api/v1/market/status
+- GET /api/v1/market/candles?interval=1h&limit=200
+- GET /api/v1/research/overview?interval=1h&limit=200
+- GET /api/v1/terminal/snapshot?interval=1h&limit=200
 
-## Tests
+## Data source notes
 
-```powershell
+- Twelve Data time series: https://twelvedata.com/docs
+- FRED series pages: https://fred.stlouisfed.org/
+- Binance public market-data-only API: https://github.com/binance/binance-spot-api-docs/blob/master/faqs/market_data_only.md
+- Federal Reserve RSS: https://www.federalreserve.gov/feeds/feeds.htm
+- BLS RSS: https://www.bls.gov/feed/
+
+FRED series are not tick data and update on their own schedules. DTWEXBGS is a broad trade-weighted USD index, not the ICE U.S. Dollar Index (DXY). Binance prices represent the crypto spot market, not XAU/USD or a broker CFD quote.
+
+## Scope and safeguards
+
+This is a read-only educational/research dashboard. It does not make buy/sell calls, provide position sizing or guaranteed probabilities, connect to a broker account, or place orders. Technical measurements and macro observations are context, not trading instructions. No real-money execution feature is included.
+
+Before interpreting any display, check its source, observation timestamp, availability, and market venue. Historical testing and paper-only simulation are future milestones, not current capabilities.
+
+## Development
+
+Run tests:
+
+~~~powershell
 cd backend
 python -m pip install -r requirements.txt
 pytest
-```
+~~~
 
-## Current API
-
-- `GET /health` — service health
-- `GET /api/v1/market/status` — selected provider and whether it is demo/external-provider data
-- `GET /api/v1/market/candles` — OHLC candles for the configured symbol
-- `GET /api/v1/research/overview` — latest candle and transparent indicator summary
-
-## Build principles
-
-1. Label every datum with provider, symbol, interval, timestamp, and demo/external-provider status.
-2. Never silently substitute demo data when a configured provider fails.
-3. Version feature definitions and research hypotheses.
-4. Test with time-ordered data; avoid look-ahead and survivorship bias.
-5. Include spread, fees, slippage, missing data, and session effects in later evaluations.
-6. Evaluate on unseen periods; do not tune a system on its final test set.
-7. Keep any future simulation separate from broker connectivity.
-
-See `docs/` before extending the system.
+See docs/architecture.md, docs/data-contracts.md, docs/validation-policy.md, and docs/roadmap.md.
