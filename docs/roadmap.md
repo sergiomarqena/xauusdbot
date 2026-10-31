@@ -7,7 +7,10 @@
 - [x] Deterministic demo feed with visible demo label
 - [x] Twelve Data OHLC adapter
 - [x] EMA / RSI / ATR measurements
-- [x] Small browser dashboard
+- [x] Multi-panel browser research console
+- [x] Keyword-tagged bullish/bearish headline bubbles
+- [x] BTC / XAU / WTI 1H, 4H, 1D and 1W trend-alignment matrix
+- [x] Binance BTC taker-side flow and labelled XAU/WTI candle-volume proxies
 - [x] Core tests
 
 ## Milestone 1 — Data integrity
