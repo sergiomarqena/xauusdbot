@@ -147,7 +147,7 @@ function renderNews(items) {
   }
 }
 
-function renderSources(feeds, crypto) {
+function renderSources(feeds, crypto, bias) {
   const status = name => (feeds || []).find(f => f.name === name)?.status === "ok";
   const paint = (id, ok, label) => {
     const row = $(id); row.innerHTML = ""; const dot = document.createElement("i"); const text = document.createElement("span");
@@ -157,6 +157,7 @@ function renderSources(feeds, crypto) {
   paint("source-status", status("Federal Reserve"), "Federal Reserve RSS");
   paint("bls-status", status("US Bureau of Labor Statistics"), "U.S. BLS RSS");
   paint("binance-status", (crypto || []).some(x => x.status === "ok"), "Binance spot ticker");
+  paint("yahoo-status", (bias || []).some(x => x.asset === "OIL" && x.bias !== "UNAVAILABLE"), "WTI futures history");
 }
 
 async function loadDashboard() {
@@ -169,7 +170,7 @@ async function loadDashboard() {
     renderGold(snapshot.gold);
     (snapshot.macro || []).forEach(renderMacro);
     (snapshot.crypto || []).forEach(renderCrypto);
-    renderNews(snapshot.news); renderSources(snapshot.feeds, snapshot.crypto);
+    renderNews(snapshot.news); renderSources(snapshot.feeds, snapshot.crypto, snapshot.bias);
     renderSentiment(snapshot.sentiment); renderBias(snapshot.bias); renderFlow(snapshot.flow);
     setText("system-state", "SOURCE MONITOR ONLINE");
     setText("updated", `Last sync ${new Date(snapshot.generated_at).toLocaleTimeString()}`);
@@ -296,9 +297,9 @@ function renderFlow(rows) {
       const legend = document.createElement("div");
       legend.className = "flow-legend";
       const buyLabel = document.createElement("span");
-      buyLabel.innerHTML = '<i class="legend-buy"></i> BUY SIDE';
+      buyLabel.innerHTML = '<i class="legend-buy"></i> INFLOW / BUY SIDE';
       const sellLabel = document.createElement("span");
-      sellLabel.innerHTML = '<i class="legend-sell"></i> SELL SIDE';
+      sellLabel.innerHTML = '<i class="legend-sell"></i> OUTFLOW / SELL SIDE';
       const method = document.createElement("span");
       method.textContent = item.method;
       legend.append(buyLabel, sellLabel, method);
