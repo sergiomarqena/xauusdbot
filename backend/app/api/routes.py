@@ -10,7 +10,7 @@ from app.services.research import build_research_overview
 from app.services.terminal import build_terminal_snapshot
 
 router = APIRouter(prefix="/api/v1")
-VALID_INTERVALS = {"1min", "5min", "15min", "30min", "1h", "4h", "1day"}
+VALID_INTERVALS = {"1min", "5min", "15min", "30min", "1h", "4h", "1day", "1week"}
 
 
 def get_provider():
@@ -121,9 +121,11 @@ async def terminal_snapshot(
         "measurements": None,
         "fetched_at": None,
     }
+    selected_gold_candles = None
     if provider is not None:
         try:
             candles = await provider.get_candles(settings.default_symbol, interval, limit)
+            selected_gold_candles = candles
             candle_set = CandleSet(
                 symbol=settings.default_symbol,
                 interval=interval,
@@ -144,7 +146,7 @@ async def terminal_snapshot(
         except (TwelveDataError, ValueError) as exc:
             gold["reason"] = str(exc)[:240]
 
-    context = await build_terminal_snapshot()
+    context = await build_terminal_snapshot(selected_interval=interval, selected_gold=selected_gold_candles)
     return {
         "service": "NORDXAU.GPT",
         "generated_at": datetime.now(timezone.utc).isoformat(),
