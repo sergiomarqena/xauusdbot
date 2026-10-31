@@ -29,11 +29,41 @@
       <article class="ticker"><div class="ticker-head"><span>ETHEREUM / USD</span><span class="source-tag">BINANCE</span></div><strong id="eth-value">—</strong><small id="eth-change">Not loaded</small></article>
     </section>
 
+    <section class="insights-grid">
+      <article class="panel sentiment-panel">
+        <div class="panel-heading"><div><p class="eyebrow">HEADLINE PRESSURE / GOLD CONTEXT</p><h2>Bullish vs bearish news</h2><p class="muted">Rule-based keyword read · not AI sentiment</p></div><span class="info-tag">NEWS-LED</span></div>
+        <div class="sentiment-bubbles">
+          <div class="bubble-card">
+            <div class="bubble positive-bubble" id="bull-bubble" style="--fill:0%"><div><strong id="bull-count">0</strong><small>HEADLINES</small></div></div>
+            <div class="bubble-copy"><strong>Gold supportive</strong><span id="bull-fill">0% relative weight</span></div>
+          </div>
+          <div class="bubble-card">
+            <div class="bubble negative-bubble" id="bear-bubble" style="--fill:0%"><div><strong id="bear-count">0</strong><small>HEADLINES</small></div></div>
+            <div class="bubble-copy"><strong>Gold headwind</strong><span id="bear-fill">0% relative weight</span></div>
+          </div>
+          <div class="neutral-card"><span id="neutral-count">0</span><small>NEUTRAL / UNCLEAR</small></div>
+        </div>
+        <div class="sentiment-track"><span id="sentiment-track-bull"></span><span id="sentiment-track-bear"></span></div>
+        <div class="sentiment-foot"><strong id="sentiment-dominant">Waiting for news</strong><span id="sentiment-method">Source headlines pending</span></div>
+        <p class="mini-disclaimer">Hawkish is tagged as a potential gold headwind; dovish as potentially supportive. Context and expectations can reverse the actual market reaction.</p>
+      </article>
+      <article class="panel bias-panel">
+        <div class="panel-heading"><div><p class="eyebrow">MULTI-TIMEFRAME STRUCTURE</p><h2>Market bias matrix</h2><p class="muted">EMA 20 / EMA 50 + RSI 14 alignment</p></div><span class="info-tag">1H · 4H · 1D · 1W</span></div>
+        <div class="bias-table-wrap">
+          <table class="bias-table">
+            <thead><tr><th>ASSET</th><th>1H</th><th>4H</th><th>1D</th><th>1W</th></tr></thead>
+            <tbody id="bias-table"><tr><td colspan="5" class="loading-cell">Calculating from source candles…</td></tr></tbody>
+          </table>
+        </div>
+        <p class="mini-disclaimer">Bias is descriptive trend alignment, not a forecast or probability. Missing source intervals stay unavailable.</p>
+      </article>
+    </section>
+
     <section class="main-grid">
       <article class="panel chart-panel">
         <div class="panel-heading"><div><p class="eyebrow">PRECIOUS METALS / SPOT</p><h2>Gold price history</h2><p id="chart-caption" class="muted">XAU/USD · Waiting for connected source</p></div>
           <div class="timeframes" role="group" aria-label="Chart interval">
-            <button class="tf" data-interval="15min">15m</button><button class="tf active" data-interval="1h">1H</button><button class="tf" data-interval="4h">4H</button><button class="tf" data-interval="1day">1D</button>
+            <button class="tf" data-interval="15min">15m</button><button class="tf active" data-interval="1h">1H</button><button class="tf" data-interval="4h">4H</button><button class="tf" data-interval="1day">1D</button><button class="tf" data-interval="1week">1W</button>
           </div>
         </div>
         <div class="chart-wrap"><canvas id="gold-chart" aria-label="Gold price line chart"></canvas><div id="chart-empty" class="chart-empty"><span class="empty-icon">⌁</span><strong>Gold data not connected</strong><span>Add TWELVE_DATA_API_KEY in Railway service variables to load XAU/USD candles.</span></div></div>
@@ -50,6 +80,12 @@
         </div>
         <div id="gold-note" class="notice">Gold measurements will appear when a data provider is connected.</div>
       </article>
+    </section>
+
+    <section class="panel flow-panel">
+      <div class="panel-heading"><div><p class="eyebrow">MARKET PARTICIPATION / VOLUME PRESSURE</p><h2>Inflow vs outflow monitor</h2><p class="muted">Buy-side vs sell-side volume proxy by recent candle</p></div><span class="info-tag" id="flow-timeframe">1H WINDOW</span></div>
+      <div id="flow-rows" class="flow-rows"><div class="loading-cell">Waiting for volume sources…</div></div>
+      <p class="mini-disclaimer">BTC uses Binance taker-buy vs estimated taker-sell quote volume. XAU and OIL use up/down candle-volume proxies where volume is supplied. These are not net deposits or institutional capital flows.</p>
     </section>
 
     <section class="section-title"><div><p class="eyebrow">MACROECONOMIC BACKDROP</p><h2>Dollar, rates & energy</h2></div><span>Official daily observations · publication times vary</span></section>
