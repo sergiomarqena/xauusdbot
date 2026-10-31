@@ -344,7 +344,9 @@ async def _yahoo_oil_candles(interval: str, limit: int = 200) -> list[Candle]:
     if interval == "1h":
         source_interval, date_range = "1h", "1mo"
     elif interval == "4h":
-        source_interval, date_range = "1h", "1mo"
+        source_interval, date_range = "1h", "3mo"
+    elif interval == "15min":
+        source_interval, date_range = "15m", "5d"
     elif interval == "1day":
         source_interval, date_range = "1d", "6mo"
     else:
@@ -448,7 +450,7 @@ async def _asset_bias_and_flow(selected_interval: str, selected_gold: list[Candl
         chosen_xau = selected_gold or []
         chosen_oil = []
         try:
-            chosen_oil = await _yahoo_oil_candles(selected_interval if selected_interval in ("1h", "4h", "1day", "1week") else "1h", 24)
+            chosen_oil = await _yahoo_oil_candles(selected_interval if selected_interval in ("15min", "1h", "4h", "1day", "1week") else "1h", 24)
         except (httpx.HTTPError, ValueError, KeyError, TypeError):
             pass
         flow_rows = [
