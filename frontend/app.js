@@ -72,16 +72,20 @@ function drawChart(candles) {
     const label = hi - ((hi - lo) / 4) * i;
     ctx.fillText(label.toFixed(2), width - right + 14, yy + 3);
   }
+  const netMove = values[values.length - 1] - values[0];
+  const trendUp = netMove >= 0;
+  const trendColor = trendUp ? "#53e0a2" : "#ff687e";
+  const trendGlow = trendUp ? "rgba(50,230,150,.85)" : "rgba(255,66,90,.9)";
   const gradient = ctx.createLinearGradient(0, top, 0, top + plotH);
-  gradient.addColorStop(0, "rgba(87,178,255,.22)"); gradient.addColorStop(1, "rgba(87,178,255,0)");
+  gradient.addColorStop(0, trendUp ? "rgba(52,218,145,.23)" : "rgba(255,74,101,.23)"); gradient.addColorStop(1, "rgba(10,20,31,0)");
   ctx.beginPath(); values.forEach((v, i) => i ? ctx.lineTo(x(i), y(v)) : ctx.moveTo(x(i), y(v)));
   ctx.lineTo(x(values.length - 1), top + plotH); ctx.lineTo(x(0), top + plotH); ctx.closePath();
   ctx.fillStyle = gradient; ctx.fill();
   ctx.beginPath(); values.forEach((v, i) => i ? ctx.lineTo(x(i), y(v)) : ctx.moveTo(x(i), y(v)));
-  ctx.strokeStyle = "#75baff"; ctx.lineWidth = 2; ctx.stroke();
+  ctx.save(); ctx.strokeStyle = trendColor; ctx.lineWidth = 2.25; ctx.shadowColor = trendGlow; ctx.shadowBlur = 13; ctx.stroke(); ctx.restore();
   const last = values[values.length - 1];
   ctx.beginPath(); ctx.arc(x(values.length - 1), y(last), 3.5, 0, Math.PI * 2);
-  ctx.fillStyle = "#b9dcff"; ctx.fill();
+  ctx.fillStyle = trendColor; ctx.shadowColor = trendGlow; ctx.shadowBlur = 14; ctx.fill(); ctx.shadowBlur = 0;
   const firstStamp = candles[0].timestamp?.slice(0, 16).replace("T", " ");
   const lastStamp = candles[candles.length - 1].timestamp?.slice(0, 16).replace("T", " ");
   ctx.fillStyle = "#71839a"; ctx.fillText(firstStamp || "", left, height - 7);
@@ -135,7 +139,11 @@ function renderNews(items) {
     const link = document.createElement("a"); link.href = item.url; link.target = "_blank"; link.rel = "noopener noreferrer";
     link.textContent = item.title;
     const summary = document.createElement("p"); summary.textContent = item.summary || "Open the original release for full context.";
-    article.append(meta, link, summary); container.appendChild(article);
+    const toneTag = document.createElement("span");
+    const tone = item.headline_tone || "NEUTRAL / UNCLEAR";
+    toneTag.className = "news-tone " + (tone === "GOLD SUPPORTIVE" ? "bull" : tone === "GOLD HEADWIND" ? "bear" : "neutral");
+    toneTag.textContent = tone;
+    article.append(meta, toneTag, link, summary); container.appendChild(article);
   }
 }
 
@@ -162,6 +170,7 @@ async function loadDashboard() {
     (snapshot.macro || []).forEach(renderMacro);
     (snapshot.crypto || []).forEach(renderCrypto);
     renderNews(snapshot.news); renderSources(snapshot.feeds, snapshot.crypto);
+    renderSentiment(snapshot.sentiment); renderBias(snapshot.bias); renderFlow(snapshot.flow);
     setText("system-state", "SOURCE MONITOR ONLINE");
     setText("updated", `Last sync ${new Date(snapshot.generated_at).toLocaleTimeString()}`);
   } catch (error) {
@@ -181,3 +190,125 @@ document.querySelectorAll(".tf").forEach(button => button.addEventListener("clic
 }));
 window.addEventListener("resize", () => { if (latestSnapshot?.gold?.status === "ok") drawChart(latestSnapshot.gold.candles); });
 tick(); setInterval(tick, 1000); loadDashboard(); setInterval(loadDashboard, 60000);
+
+
+function renderSentiment(sentiment) {
+  if (!sentiment) return;
+  const support = Number(sentiment.supportive_count || 0);
+  const headwind = Number(sentiment.headwind_count || 0);
+  const neutral = Number(sentiment.neutral_count || 0);
+  const supportFill = Number(sentiment.supportive_fill || 0);
+  const headwindFill = Number(sentiment.headwind_fill || 0);
+  setText("bull-count", support);
+  setText("bear-count", headwind);
+  setText("neutral-count", neutral);
+  setText("bull-fill", supportFill + "% relative directional weight");
+  setText("bear-fill", headwindFill + "% relative directional weight");
+  $("bull-bubble").style.setProperty("--fill", supportFill + "%");
+  $("bear-bubble").style.setProperty("--fill", headwindFill + "%");
+  const total = supportFill + headwindFill || 1;
+  $("sentiment-track-bull").style.width = (100 * supportFill / total) + "%";
+  $("sentiment-track-bear").style.width = (100 * headwindFill / total) + "%";
+  setText("sentiment-dominant", sentiment.dominant || "No clear read");
+  setText("sentiment-method", (sentiment.method || "Keyword tags") + " · " + (support + headwind + neutral) + " headlines");
+}
+
+function renderBias(rows) {
+  const body = $("bias-table");
+  body.replaceChildren();
+  const assets = ["BTC", "XAU", "OIL"];
+  const frames = ["1H", "4H", "1D", "1W"];
+  const lookup = new Map((rows || []).map(row => [row.asset + ":" + row.timeframe, row]));
+  for (const asset of assets) {
+    const tr = document.createElement("tr");
+    const label = document.createElement("th");
+    label.className = "bias-asset";
+    label.textContent = asset;
+    tr.appendChild(label);
+    for (const frame of frames) {
+      const td = document.createElement("td");
+      const cell = document.createElement("div");
+      const tag = document.createElement("strong");
+      const bar = document.createElement("span");
+      const inner = document.createElement("i");
+      const item = lookup.get(asset + ":" + frame);
+      if (!item || item.bias === "UNAVAILABLE") {
+        cell.className = "bias-cell unavailable";
+        tag.textContent = "N/A";
+        bar.className = "alignment-track";
+        inner.style.width = "0%";
+        if (item && item.reason) cell.title = item.reason;
+      } else {
+        const kind = item.bias === "BULLISH" ? "bull" : item.bias === "BEARISH" ? "bear" : "mixed";
+        cell.className = "bias-cell " + kind;
+        tag.textContent = item.bias;
+        bar.className = "alignment-track";
+        inner.style.width = Math.max(0, Math.min(100, item.alignment || 0)) + "%";
+        cell.title = item.source + " · " + (item.basis || "") + " · Last " + fmt(item.last_price, 2);
+      }
+      bar.appendChild(inner);
+      cell.append(tag, bar);
+      td.appendChild(cell);
+      tr.appendChild(td);
+    }
+    body.appendChild(tr);
+  }
+}
+
+function renderFlow(rows) {
+  const container = $("flow-rows");
+  container.replaceChildren();
+  setText("flow-timeframe", selectedInterval.toUpperCase() + " WINDOW");
+  for (const asset of ["BTC", "XAU", "OIL"]) {
+    const item = (rows || []).find(x => x.asset === asset);
+    const section = document.createElement("div");
+    section.className = "flow-asset";
+    const head = document.createElement("div");
+    head.className = "flow-head";
+    const name = document.createElement("strong");
+    name.textContent = asset;
+    const totals = document.createElement("span");
+    const available = item && item.status === "ok";
+    totals.textContent = available
+      ? "BUY " + fmt(item.buy_total, 0) + " / SELL " + fmt(item.sell_total, 0) + " " + (item.unit || "")
+      : ((item && item.reason) || "Volume data unavailable");
+    head.append(name, totals);
+    section.appendChild(head);
+    if (available) {
+      const bars = document.createElement("div");
+      bars.className = "flow-bars";
+      const maxValue = Math.max(1, ...(item.points || []).flatMap(point => [point.buy, point.sell]));
+      for (const point of item.points || []) {
+        const pair = document.createElement("div");
+        pair.className = "flow-pair";
+        const buy = document.createElement("span");
+        buy.className = "flow-buy";
+        const sell = document.createElement("span");
+        sell.className = "flow-sell";
+        buy.style.height = Math.max(3, point.buy / maxValue * 100) + "%";
+        sell.style.height = Math.max(3, point.sell / maxValue * 100) + "%";
+        buy.title = "Buy-side proxy " + fmt(point.buy, 2);
+        sell.title = "Sell-side proxy " + fmt(point.sell, 2);
+        pair.append(buy, sell);
+        bars.appendChild(pair);
+      }
+      section.appendChild(bars);
+      const legend = document.createElement("div");
+      legend.className = "flow-legend";
+      const buyLabel = document.createElement("span");
+      buyLabel.innerHTML = '<i class="legend-buy"></i> BUY SIDE';
+      const sellLabel = document.createElement("span");
+      sellLabel.innerHTML = '<i class="legend-sell"></i> SELL SIDE';
+      const method = document.createElement("span");
+      method.textContent = item.method;
+      legend.append(buyLabel, sellLabel, method);
+      section.appendChild(legend);
+    } else {
+      const missing = document.createElement("div");
+      missing.className = "flow-unavailable";
+      missing.textContent = (item && item.reason) || "Source volume not available for this market.";
+      section.appendChild(missing);
+    }
+    container.appendChild(section);
+  }
+}
