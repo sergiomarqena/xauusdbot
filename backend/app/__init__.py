@@ -1,0 +1,1 @@
+"""NORDXAU.GPT application package."""
