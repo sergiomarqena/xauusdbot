@@ -422,7 +422,7 @@ async def _asset_bias_and_flow(selected_interval: str, selected_gold: list[Candl
         for label, xau_interval, btc_interval, oil_interval in BIAS_TIMEFRAMES:
             tasks.append(_safe_bias(
                 "BTC", label, btc_interval,
-                lambda i, c=client: _binance_klines(c, "BTCUSDT", i, 200).then if False else _btc_candles(c, i),
+                lambda i, c=client: _btc_candles(c, i),
                 "Binance BTC/USDT spot",
             ))
             if selected_gold is not None and xau_interval == selected_interval:
