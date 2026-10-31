@@ -11,7 +11,9 @@ NORDXAU.GPT brings together XAU/USD candles (when a Twelve Data key is configure
 - Public Binance 24-hour spot ticker snapshots for BTC/USDT and ETH/USDT.
 - Official Federal Reserve press-release and BLS latest-number RSS headlines.
 - Cached source responses with source labels, timestamps, and visible unavailable states.
-- Responsive browser terminal and read-only JSON API.
+- Responsive research terminal with green/red trend-glow chart, news-tone bubbles, and a BTC/XAU/OIL 1H/4H/1D/1W bias matrix.
+- A buy-side / sell-side activity monitor: Binance taker quote volume for BTC and explicitly labelled candle-direction volume proxies for XAU and WTI.
+- Read-only JSON API.
 
 ## Data setup
 
@@ -58,7 +60,7 @@ FRED series are not tick data and update on their own schedules. DTWEXBGS is a b
 
 This is a read-only educational/research dashboard. It does not make buy/sell calls, provide position sizing or guaranteed probabilities, connect to a broker account, or place orders. Technical measurements and macro observations are context, not trading instructions. No real-money execution feature is included.
 
-Before interpreting any display, check its source, observation timestamp, availability, and market venue. Historical testing and paper-only simulation are future milestones, not current capabilities.
+Before interpreting any display, check its source, observation timestamp, availability, and market venue. Headline sentiment currently uses a transparent keyword tagger, not an AI analyst. Multi-timeframe bias is a descriptive EMA/RSI alignment, not a probability. BTC flow uses Binance taker-side quote volumes; Gold and WTI flow displays use candle-volume direction proxies only where source volume exists. These values are not net exchange deposits or institutional capital flows. Historical testing, paper-only simulation, and the AI research analyst are future milestones, not current capabilities.
 
 ## Development
 
