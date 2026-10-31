@@ -7,7 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     app_env: str = "development"
     app_name: str = "NORDXAU.GPT"
-    data_provider: str = "demo"
+    data_provider: str = "twelvedata"
     twelve_data_api_key: str = ""
     default_symbol: str = "XAU/USD"
     default_interval: str = "1h"
