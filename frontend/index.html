@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b1018" />
+  <title>NORDXAU.GPT — Market Intelligence</title>
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="mark">N</span><div><strong>NORDXAU.GPT</strong><small>MARKET INTELLIGENCE</small></div></div>
+    <div class="top-meta"><span id="data-badge" class="status">CHECKING DATA</span><span class="mono" id="clock">--:--:-- UTC</span></div>
+  </header>
+  <main class="shell">
+    <section class="intro"><div><p class="eyebrow">RESEARCH TERMINAL / 001</p><h1>Gold market overview</h1><p class="muted">A transparent workspace for price data, market measurements and research.</p></div><button id="refresh">Refresh data <span>↻</span></button></section>
+    <section class="grid metrics">
+      <article class="panel"><span class="panel-label">INSTRUMENT</span><strong class="metric-value" id="symbol">XAU/USD</strong><small id="interval">1H INTERVAL</small></article>
+      <article class="panel"><span class="panel-label">LATEST CLOSE</span><strong class="metric-value" id="last-close">—</strong><small id="last-time">Waiting for data</small></article>
+      <article class="panel"><span class="panel-label">BAR CHANGE</span><strong class="metric-value" id="change">—</strong><small>Previous candle comparison</small></article>
+      <article class="panel"><span class="panel-label">DATA SOURCE</span><strong class="metric-value compact" id="provider">—</strong><small id="data-mode">—</small></article>
+    </section>
+    <section class="grid lower">
+      <article class="panel feature"><div class="section-head"><div><p class="eyebrow">DERIVED MEASUREMENTS</p><h2>Technical context</h2></div><span class="muted" id="observations">— observations</span></div>
+        <div class="measure-grid">
+          <div><span>EMA 20</span><strong id="ema20">—</strong></div><div><span>EMA 50</span><strong id="ema50">—</strong></div>
+          <div><span>RSI 14</span><strong id="rsi14">—</strong></div><div><span>ATR 14</span><strong id="atr14">—</strong></div>
+        </div><p class="disclaimer" id="interpretation">Measurements are descriptive. No buy/sell call or probability claim is generated.</p>
+      </article>
+      <article class="panel side"><p class="eyebrow">SYSTEM STATUS</p><h2>Research layer</h2><div class="status-row"><span>API</span><strong id="api-status">—</strong></div><div class="status-row"><span>Market data</span><strong id="market-status">—</strong></div><div class="status-row"><span>Execution</span><strong>Disabled</strong></div><div class="status-row"><span>Simulation</span><strong>Planned</strong></div></article>
+    </section>
+    <footer><span>NORDXAU.GPT · FOUNDATION BUILD 0.1.0</span><span>Research first. Verify every dataset.</span></footer>
+  </main>
+  <script src="/assets/app.js"></script>
+</body>
+</html>
