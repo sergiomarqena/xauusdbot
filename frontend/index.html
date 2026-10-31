@@ -3,33 +3,70 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0b1018" />
-  <title>NORDXAU.GPT — Market Intelligence</title>
+  <meta name="theme-color" content="#080d14" />
+  <title>NORDXAU.GPT — Research Console</title>
   <link rel="stylesheet" href="/assets/styles.css" />
 </head>
 <body>
   <header class="topbar">
-    <div class="brand"><span class="mark">N</span><div><strong>NORDXAU.GPT</strong><small>MARKET INTELLIGENCE</small></div></div>
-    <div class="top-meta"><span id="data-badge" class="status">CHECKING DATA</span><span class="mono" id="clock">--:--:-- UTC</span></div>
+    <div class="brand"><span class="mark">N</span><div><strong>NORDXAU<span>.GPT</span></strong><small>GLOBAL MARKET RESEARCH CONSOLE</small></div></div>
+    <div class="top-right"><span class="live-dot"></span><span id="system-state">CONNECTING SOURCES</span><span class="clock mono" id="clock">--:--:-- UTC</span></div>
   </header>
+
   <main class="shell">
-    <section class="intro"><div><p class="eyebrow">RESEARCH TERMINAL / 001</p><h1>Gold market overview</h1><p class="muted">A transparent workspace for price data, market measurements and research.</p></div><button id="refresh">Refresh data <span>↻</span></button></section>
-    <section class="grid metrics">
-      <article class="panel"><span class="panel-label">INSTRUMENT</span><strong class="metric-value" id="symbol">XAU/USD</strong><small id="interval">1H INTERVAL</small></article>
-      <article class="panel"><span class="panel-label">LATEST CLOSE</span><strong class="metric-value" id="last-close">—</strong><small id="last-time">Waiting for data</small></article>
-      <article class="panel"><span class="panel-label">BAR CHANGE</span><strong class="metric-value" id="change">—</strong><small>Previous candle comparison</small></article>
-      <article class="panel"><span class="panel-label">DATA SOURCE</span><strong class="metric-value compact" id="provider">—</strong><small id="data-mode">—</small></article>
+    <section class="hero">
+      <div><p class="eyebrow">MULTI-ASSET MONITOR / 01</p><h1>Market intelligence</h1><p class="sub">Gold · macroeconomics · cross-asset context · official news</p></div>
+      <div class="hero-actions"><span class="updated" id="updated">Awaiting first data sync</span><button id="refresh">Refresh <b>↻</b></button></div>
     </section>
-    <section class="grid lower">
-      <article class="panel feature"><div class="section-head"><div><p class="eyebrow">DERIVED MEASUREMENTS</p><h2>Technical context</h2></div><span class="muted" id="observations">— observations</span></div>
-        <div class="measure-grid">
-          <div><span>EMA 20</span><strong id="ema20">—</strong></div><div><span>EMA 50</span><strong id="ema50">—</strong></div>
-          <div><span>RSI 14</span><strong id="rsi14">—</strong></div><div><span>ATR 14</span><strong id="atr14">—</strong></div>
-        </div><p class="disclaimer" id="interpretation">Measurements are descriptive. No buy/sell call or probability claim is generated.</p>
+
+    <section class="ticker-strip" aria-label="Market data summary">
+      <article class="ticker gold"><div class="ticker-head"><span>XAU / USD</span><span class="pill" id="gold-badge">KEY REQUIRED</span></div><strong id="gold-price">Unavailable</strong><small id="gold-time">Connect market data provider</small></article>
+      <article class="ticker"><div class="ticker-head"><span>BROAD USD INDEX</span><span class="source-tag">FRED</span></div><strong id="usd-value">—</strong><small id="usd-time">Not loaded</small></article>
+      <article class="ticker"><div class="ticker-head"><span>US 10Y YIELD</span><span class="source-tag">FRED</span></div><strong id="nominal-value">—</strong><small id="nominal-time">Not loaded</small></article>
+      <article class="ticker"><div class="ticker-head"><span>US 10Y REAL YIELD</span><span class="source-tag">FRED</span></div><strong id="real-value">—</strong><small id="real-time">Not loaded</small></article>
+      <article class="ticker"><div class="ticker-head"><span>WTI CRUDE</span><span class="source-tag">FRED</span></div><strong id="oil-value">—</strong><small id="oil-time">Not loaded</small></article>
+      <article class="ticker"><div class="ticker-head"><span>BITCOIN / USD</span><span class="source-tag">BINANCE</span></div><strong id="btc-value">—</strong><small id="btc-change">Not loaded</small></article>
+      <article class="ticker"><div class="ticker-head"><span>ETHEREUM / USD</span><span class="source-tag">BINANCE</span></div><strong id="eth-value">—</strong><small id="eth-change">Not loaded</small></article>
+    </section>
+
+    <section class="main-grid">
+      <article class="panel chart-panel">
+        <div class="panel-heading"><div><p class="eyebrow">PRECIOUS METALS / SPOT</p><h2>Gold price history</h2><p id="chart-caption" class="muted">XAU/USD · Waiting for connected source</p></div>
+          <div class="timeframes" role="group" aria-label="Chart interval">
+            <button class="tf" data-interval="15min">15m</button><button class="tf active" data-interval="1h">1H</button><button class="tf" data-interval="4h">4H</button><button class="tf" data-interval="1day">1D</button>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="gold-chart" aria-label="Gold price line chart"></canvas><div id="chart-empty" class="chart-empty"><span class="empty-icon">⌁</span><strong>Gold data not connected</strong><span>Add TWELVE_DATA_API_KEY in Railway service variables to load XAU/USD candles.</span></div></div>
+        <div class="chart-foot"><span id="chart-source">SOURCE: TWELVE DATA · NOT CONNECTED</span><span id="chart-bars">0 BARS</span></div>
       </article>
-      <article class="panel side"><p class="eyebrow">SYSTEM STATUS</p><h2>Research layer</h2><div class="status-row"><span>API</span><strong id="api-status">—</strong></div><div class="status-row"><span>Market data</span><strong id="market-status">—</strong></div><div class="status-row"><span>Execution</span><strong>Disabled</strong></div><div class="status-row"><span>Simulation</span><strong>Planned</strong></div></article>
+
+      <article class="panel technical-panel">
+        <div class="panel-heading"><div><p class="eyebrow">QUANTITATIVE MEASUREMENTS</p><h2>Technical context</h2></div><span class="info-tag">DESCRIPTIVE</span></div>
+        <div class="technical-list">
+          <div class="measure"><span>EMA 20</span><strong id="ema20">—</strong><small>Shorter trend average</small></div>
+          <div class="measure"><span>EMA 50</span><strong id="ema50">—</strong><small>Longer trend average</small></div>
+          <div class="measure"><span>RSI · 14</span><strong id="rsi14">—</strong><small>Momentum oscillator</small></div>
+          <div class="measure"><span>ATR · 14</span><strong id="atr14">—</strong><small>Recent price range</small></div>
+        </div>
+        <div id="gold-note" class="notice">Gold measurements will appear when a data provider is connected.</div>
+      </article>
     </section>
-    <footer><span>NORDXAU.GPT · FOUNDATION BUILD 0.1.0</span><span>Research first. Verify every dataset.</span></footer>
+
+    <section class="section-title"><div><p class="eyebrow">MACROECONOMIC BACKDROP</p><h2>Dollar, rates & energy</h2></div><span>Official daily observations · publication times vary</span></section>
+    <section class="macro-grid">
+      <article class="panel macro-card"><div class="card-top"><span>USD STRENGTH</span><span class="source-tag">DTWEXBGS</span></div><strong id="macro-usd">—</strong><p>Broad trade-weighted U.S. dollar index. This is not the ICE DXY contract.</p><small id="macro-usd-date">FRED · No observation loaded</small></article>
+      <article class="panel macro-card"><div class="card-top"><span>NOMINAL RATES</span><span class="source-tag">DGS10</span></div><strong id="macro-nominal">—</strong><p>10-year U.S. Treasury constant-maturity yield.</p><small id="macro-nominal-date">FRED · No observation loaded</small></article>
+      <article class="panel macro-card"><div class="card-top"><span>REAL RATES</span><span class="source-tag">DFII10</span></div><strong id="macro-real">—</strong><p>10-year inflation-indexed Treasury yield.</p><small id="macro-real-date">FRED · No observation loaded</small></article>
+      <article class="panel macro-card"><div class="card-top"><span>ENERGY</span><span class="source-tag">DCOILWTICO</span></div><strong id="macro-oil">—</strong><p>West Texas Intermediate crude spot benchmark.</p><small id="macro-oil-date">FRED · No observation loaded</small></article>
+    </section>
+
+    <section class="bottom-grid">
+      <article class="panel news-panel"><div class="panel-heading"><div><p class="eyebrow">PRIMARY-SOURCE NEWSWIRE</p><h2>Policy & economic releases</h2></div><span class="info-tag">OFFICIAL FEEDS</span></div><div id="news-list" class="news-list"><div class="loading-row">Loading Federal Reserve and BLS headlines…</div></div></article>
+      <article class="panel watch-panel"><div class="panel-heading"><div><p class="eyebrow">CROSS-ASSET SNAPSHOT</p><h2>Digital assets</h2></div><span class="source-tag">PUBLIC SPOT DATA</span></div><div class="watch-row"><div><strong>BTC / USDT</strong><small>24-hour rolling change</small></div><strong id="watch-btc">—</strong><span id="watch-btc-pct" class="change">—</span></div><div class="watch-row"><div><strong>ETH / USDT</strong><small>24-hour rolling change</small></div><strong id="watch-eth">—</strong><span id="watch-eth-pct" class="change">—</span></div><div class="source-list"><span>CONNECTED SOURCES</span><div id="source-status"><i></i> Federal Reserve RSS <b>Checking</b></div><div id="bls-status"><i></i> U.S. BLS RSS <b>Checking</b></div><div id="binance-status"><i></i> Binance spot ticker <b>Checking</b></div></div></article>
+    </section>
+
+    <section class="disclaimer"><strong>DATA & SCOPE</strong><span>This is a read-only research dashboard. It does not generate buy/sell instructions, position sizing, guaranteed probabilities, or broker orders. Macro series are published on their own schedules; crypto data is a rolling 24-hour snapshot. A feed failure is shown as unavailable, never replaced with invented values.</span></section>
+    <footer><span>NORDXAU.GPT · RESEARCH CONSOLE 0.2</span><span>Evidence first · source timestamps preserved · execution disabled</span><a href="/docs" target="_blank" rel="noreferrer">API reference ↗</a></footer>
   </main>
   <script src="/assets/app.js"></script>
 </body>
