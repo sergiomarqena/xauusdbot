@@ -27,7 +27,7 @@ class CandleSet(BaseModel):
     symbol: str
     interval: str
     provider: str
-    data_mode: Literal["demo", "provider"]
+    data_mode: Literal["demo", "provider", "unavailable"]
     fetched_at: datetime
     candles: list[Candle]
 
