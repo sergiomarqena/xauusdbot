@@ -3,107 +3,189 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#080d14" />
-  <title>NORDXAU.GPT — Research Console</title>
+  <meta name="theme-color" content="#080711" />
+  <meta name="description" content="NORDXAU market intelligence — gold, macroeconomics and digital asset research." />
+  <title>NORDXAU.GPT — Market Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/styles.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand"><span class="mark">N</span><div><strong>NORDXAU<span>.GPT</span></strong><small>GLOBAL MARKET RESEARCH CONSOLE</small></div></div>
-    <div class="top-right"><span class="live-dot"></span><span id="system-state">CONNECTING SOURCES</span><span class="clock mono" id="clock">--:--:-- UTC</span></div>
-  </header>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#dashboard" aria-label="NORDXAU home">
+        <span class="brand-mark"><i></i><i></i></span>
+        <span class="brand-copy"><strong>NORD<span>XAU</span></strong><small>MARKET INTELLIGENCE</small></span>
+      </a>
+      <div class="side-label">WORKSPACE</div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <a class="nav-link active" href="#dashboard"><span class="nav-ico">⌂</span>Dashboard</a>
+        <a class="nav-link" href="#market-overview"><span class="nav-ico">▥</span>Market Overview</a>
+        <a class="nav-link" href="#analyst"><span class="nav-ico">✳</span>AI Analyst <em class="nav-new">BETA</em></a>
+        <a class="nav-link" href="#gold-research"><span class="nav-ico">◈</span>Gold Research</a>
+        <a class="nav-link" href="#movers"><span class="nav-ico">⌁</span>Market Movers</a>
+        <a class="nav-link" href="#news"><span class="nav-ico">▤</span>Latest News</a>
+      </nav>
+      <div class="side-label side-label-spaced">PREFERENCES</div>
+      <nav class="side-nav">
+        <a class="nav-link" href="#sources"><span class="nav-ico">◉</span>Data Sources</a>
+        <a class="nav-link" href="/docs" target="_blank" rel="noreferrer"><span class="nav-ico">⚙</span>API Reference</a>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="workspace-card">
+        <div class="workspace-icon">✦</div>
+        <small>RESEARCH WORKSPACE</small>
+        <strong>Clarity over noise.</strong>
+        <p>Source-led market context, in one place.</p>
+        <a href="#sources">Explore connected feeds <span>↗</span></a>
+      </div>
+      <div class="sidebar-bottom">
+        <span class="status-dot" id="sidebar-dot"></span>
+        <span id="sidebar-status">Connecting to data</span>
+        <span class="sidebar-version">v0.3</span>
+      </div>
+    </aside>
 
-  <main class="shell">
-    <section class="hero">
-      <div><p class="eyebrow">MULTI-ASSET MONITOR / 01</p><h1>Market intelligence</h1><p class="sub">Gold · macroeconomics · cross-asset context · official news</p></div>
-      <div class="hero-actions"><span class="updated" id="updated">Awaiting first data sync</span><button id="refresh">Refresh <b>↻</b></button></div>
-    </section>
+    <main class="main-area" id="dashboard">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobile-menu" aria-label="Toggle menu">☰</button>
+        <div class="search-wrap">
+          <span class="search-icon">⌕</span>
+          <input id="asset-search" type="search" placeholder="Search assets, symbols, market data..." autocomplete="off" />
+          <kbd>⌘ K</kbd>
+          <div class="search-results" id="search-results" hidden></div>
+        </div>
+        <div class="topbar-right">
+          <div class="market-state"><span class="status-dot" id="top-dot"></span><span id="top-status">CHECKING SOURCES</span></div>
+          <span class="top-divider"></span>
+          <span class="top-time mono" id="clock">--:--:-- UTC</span>
+          <button class="avatar" aria-label="Workspace profile">N</button>
+        </div>
+      </header>
 
-    <section class="ticker-strip" aria-label="Market data summary">
-      <article class="ticker gold"><div class="ticker-head"><span>XAU / USD</span><span class="pill" id="gold-badge">KEY REQUIRED</span></div><strong id="gold-price">Unavailable</strong><small id="gold-time">Connect market data provider</small></article>
-      <article class="ticker"><div class="ticker-head"><span>BROAD USD INDEX</span><span class="source-tag">FRED</span></div><strong id="usd-value">—</strong><small id="usd-time">Not loaded</small></article>
-      <article class="ticker"><div class="ticker-head"><span>US 10Y YIELD</span><span class="source-tag">FRED</span></div><strong id="nominal-value">—</strong><small id="nominal-time">Not loaded</small></article>
-      <article class="ticker"><div class="ticker-head"><span>US 10Y REAL YIELD</span><span class="source-tag">FRED</span></div><strong id="real-value">—</strong><small id="real-time">Not loaded</small></article>
-      <article class="ticker"><div class="ticker-head"><span>WTI CRUDE</span><span class="source-tag">FRED</span></div><strong id="oil-value">—</strong><small id="oil-time">Not loaded</small></article>
-      <article class="ticker"><div class="ticker-head"><span>BITCOIN / USD</span><span class="source-tag">BINANCE</span></div><strong id="btc-value">—</strong><small id="btc-change">Not loaded</small></article>
-      <article class="ticker"><div class="ticker-head"><span>ETHEREUM / USD</span><span class="source-tag">BINANCE</span></div><strong id="eth-value">—</strong><small id="eth-change">Not loaded</small></article>
-    </section>
+      <div class="page-content">
+        <section class="page-heading">
+          <div><div class="eyebrow"><span class="eyebrow-line"></span>GLOBAL MARKETS / RESEARCH CONSOLE</div><h1>Market intelligence<span class="heading-period">.</span></h1><p>One view across gold, macroeconomics and digital assets.</p></div>
+          <div class="heading-actions"><span class="sync-label" id="updated">Awaiting first data sync</span><button class="btn btn-quiet" id="refresh"><span>↻</span> Refresh data</button></div>
+        </section>
 
-    <section class="insights-grid">
-      <article class="panel sentiment-panel">
-        <div class="panel-heading"><div><p class="eyebrow">HEADLINE PRESSURE / GOLD CONTEXT</p><h2>Bullish vs bearish news</h2><p class="muted">Rule-based keyword read · not AI sentiment</p></div><span class="info-tag">NEWS-LED</span></div>
-        <div class="sentiment-bubbles">
-          <div class="bubble-card">
-            <div class="bubble positive-bubble" id="bull-bubble" style="--fill:0%"><div><strong id="bull-count">0</strong><small>HEADLINES</small></div></div>
-            <div class="bubble-copy"><strong>Gold supportive</strong><span id="bull-fill">0% relative weight</span></div>
+        <section class="ticker-grid" aria-label="Live market snapshot">
+          <article class="ticker-card">
+            <div class="ticker-top"><span class="asset-symbol btc-symbol">₿</span><span class="ticker-name">BITCOIN <small>BTC / USDT</small></span><span class="ticker-live" id="btc-state">--</span></div>
+            <div class="ticker-bottom"><strong id="btc-value">—</strong><span class="ticker-change" id="btc-change">Awaiting source</span></div>
+            <div class="ticker-spark spark-green"><svg viewBox="0 0 120 34" preserveAspectRatio="none"><path d="M1 27 L12 21 L20 24 L31 15 L42 19 L50 10 L61 16 L71 7 L82 13 L91 5 L103 10 L119 2"/></svg></div>
+          </article>
+          <article class="ticker-card">
+            <div class="ticker-top"><span class="asset-symbol eth-symbol">◆</span><span class="ticker-name">ETHEREUM <small>ETH / USDT</small></span><span class="ticker-live" id="eth-state">--</span></div>
+            <div class="ticker-bottom"><strong id="eth-value">—</strong><span class="ticker-change" id="eth-change">Awaiting source</span></div>
+            <div class="ticker-spark spark-purple"><svg viewBox="0 0 120 34" preserveAspectRatio="none"><path d="M1 26 L12 19 L22 22 L34 13 L44 19 L56 11 L67 15 L77 8 L88 12 L99 4 L110 9 L119 2"/></svg></div>
+          </article>
+          <article class="ticker-card ticker-gold">
+            <div class="ticker-top"><span class="asset-symbol gold-symbol">Au</span><span class="ticker-name">GOLD SPOT <small>XAU / USD</small></span><span class="ticker-live" id="gold-state">--</span></div>
+            <div class="ticker-bottom"><strong id="gold-price">—</strong><span class="ticker-change" id="gold-time">Awaiting source</span></div>
+            <div class="ticker-spark spark-gold"><svg viewBox="0 0 120 34" preserveAspectRatio="none"><path d="M1 25 L12 22 L24 24 L34 15 L44 19 L56 11 L68 14 L78 8 L89 13 L99 5 L109 8 L119 2"/></svg></div>
+          </article>
+          <article class="ticker-card">
+            <div class="ticker-top"><span class="asset-symbol usd-symbol">$</span><span class="ticker-name">US DOLLAR <small>BROAD USD INDEX</small></span><span class="ticker-live" id="usd-state">FRED</span></div>
+            <div class="ticker-bottom"><strong id="usd-value">—</strong><span class="ticker-change muted-change" id="usd-time">Daily observation</span></div>
+            <div class="ticker-spark spark-blue"><svg viewBox="0 0 120 34" preserveAspectRatio="none"><path d="M1 7 L12 13 L22 9 L34 18 L45 13 L55 22 L65 15 L76 24 L88 17 L98 23 L109 18 L119 27"/></svg></div>
+          </article>
+        </section>
+
+        <section class="hero-grid">
+          <article class="hero-card">
+            <div class="hero-copy">
+              <div class="hero-pill"><span class="status-dot"></span> SOURCE-LED MARKET CONTEXT</div>
+              <h2>Smarter insights.<br /><span>Stronger decisions.</span></h2>
+              <p>Track markets, understand the macro backdrop and explore verified data across gold and crypto.</p>
+              <div class="hero-actions"><a class="btn btn-primary" href="#market-overview">Explore markets <span>↗</span></a><a class="btn btn-outline" href="#gold-research">Gold research</a></div>
+              <div class="hero-footnote"><span>01</span><span>REAL DATA · CLEAR CONTEXT · NO NOISE</span></div>
+            </div>
+            <div class="hero-art" aria-hidden="true">
+              <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div>
+              <div class="planet"><div class="planet-grid"></div><div class="planet-shine"></div></div>
+              <div class="float-coin coin-btc">₿</div><div class="float-coin coin-eth">◆</div><div class="float-coin coin-gold">Au</div>
+              <div class="art-glow"></div>
+            </div>
+          </article>
+
+          <article class="panel analyst-card" id="analyst">
+            <div class="panel-heading"><div class="panel-title"><span class="panel-icon analyst-icon">✳</span><div><h2>AI Analyst</h2><small>MARKET CONTEXT ENGINE</small></div></div><span class="status-chip" id="analyst-state">PREVIEW</span></div>
+            <div class="analyst-summary" id="analyst-summary">Collecting verified market data to build a source-led overview.</div>
+            <div class="analyst-metrics"><div><span>NEWS SUPPORT</span><strong id="analyst-bull">—</strong></div><div><span>NEWS HEADWIND</span><strong id="analyst-bear">—</strong></div></div>
+            <div class="analyst-tags"><span class="tag-bull">↗ Supportive</span><span class="tag-neutral">• Neutral</span><span class="tag-bear">↘ Headwind</span></div>
+            <a class="analyst-link" href="#research-context">View research basis <span>→</span></a>
+            <p class="analyst-note">Transparent source and indicator context. This panel is not an autonomous AI forecast.</p>
+          </article>
+        </section>
+
+        <section class="content-grid" id="market-overview">
+          <article class="panel chart-panel" id="gold-research">
+            <div class="panel-heading chart-heading"><div><div class="eyebrow">PRECIOUS METALS / PRICE ACTION</div><h2>Gold market overview</h2><p id="chart-caption">XAU/USD · waiting for connected source</p></div><span class="source-chip" id="gold-badge">SOURCE CHECK</span></div>
+            <div class="chart-tools"><div class="chart-legend"><span><i class="legend-gold"></i>XAU / USD</span><span class="chart-source" id="chart-source">TWELVE DATA · NOT CONNECTED</span></div><div class="timeframes"><button class="tf" data-interval="15min">15m</button><button class="tf active" data-interval="1h">1H</button><button class="tf" data-interval="4h">4H</button><button class="tf" data-interval="1day">1D</button><button class="tf" data-interval="1week">1W</button></div></div>
+            <div class="chart-wrap"><canvas id="gold-chart" aria-label="Gold market price chart"></canvas><div id="chart-empty" class="chart-empty"><span class="empty-chart-icon">⌁</span><strong>Gold data not connected</strong><small>Add a valid Twelve Data key to load verified XAU/USD candles.</small></div></div>
+            <div class="chart-footer"><span id="chart-bars">0 BARS</span><span id="chart-direction">Waiting for source data</span></div>
+          </article>
+
+          <article class="panel movers-panel" id="movers">
+            <div class="panel-heading"><div><div class="eyebrow">MARKET SCANNER</div><h2>Top movers</h2><p>24-hour change · provider-labelled quotes</p></div><span class="panel-icon">⌁</span></div>
+            <div class="movers-provider" id="movers-provider">CoinGecko · checking</div>
+            <div class="movers-list" id="movers-list"><div class="empty-row">Waiting for market data…</div></div>
+            <div class="panel-bottom-link" id="movers-foot">Provider data will appear here when available.</div>
+          </article>
+        </section>
+
+        <section class="content-grid lower-grid">
+          <article class="panel news-panel" id="news">
+            <div class="panel-heading"><div><div class="eyebrow">PRIMARY-SOURCE NEWSWIRE</div><h2>Latest market news</h2><p>Federal Reserve and U.S. Bureau of Labor Statistics feeds</p></div><span class="source-chip">OFFICIAL FEEDS</span></div>
+            <div class="news-list" id="news-list"><div class="empty-row">Loading official headlines…</div></div>
+            <div class="panel-bottom-link">Headline tags are context only; open the original release for details.</div>
+          </article>
+          <article class="panel macro-panel" id="research-context">
+            <div class="panel-heading"><div><div class="eyebrow">MACRO BACKDROP</div><h2>Rates & energy</h2><p>Latest available FRED observations</p></div><span class="panel-icon">⌁</span></div>
+            <div class="macro-list">
+              <div class="macro-row"><span><b>10Y Treasury yield</b><small>DGS10 · nominal rate</small></span><strong id="nominal-value">—</strong><small id="nominal-time">—</small></div>
+              <div class="macro-row"><span><b>10Y real yield</b><small>DFII10 · inflation indexed</small></span><strong id="real-value">—</strong><small id="real-time">—</small></div>
+              <div class="macro-row"><span><b>WTI crude</b><small>DCOILWTICO · USD/barrel</small></span><strong id="oil-value">—</strong><small id="oil-time">—</small></div>
+            </div>
+            <div class="macro-callout">Macro observations update on their own publication schedules and may be delayed.</div>
+          </article>
+        </section>
+
+        <section class="panel structure-panel">
+          <div class="panel-heading"><div><div class="eyebrow">MULTI-TIMEFRAME STRUCTURE</div><h2>Market bias matrix</h2><p>EMA 20 / EMA 50 + RSI 14 alignment · descriptive only</p></div><span class="source-chip">1H · 4H · 1D · 1W</span></div>
+          <div class="table-wrap"><table class="bias-table"><thead><tr><th>ASSET</th><th>1H</th><th>4H</th><th>1D</th><th>1W</th></tr></thead><tbody id="bias-table"><tr><td colspan="5" class="empty-row">Calculating source alignment…</td></tr></tbody></table></div>
+        </section>
+
+        <section class="panel flow-panel">
+          <div class="panel-heading"><div><div class="eyebrow">MARKET PARTICIPATION / VOLUME</div><h2>Buy-side vs sell-side activity</h2><p>Recent candle-volume context · methodology shown per asset</p></div><span class="source-chip" id="flow-timeframe">1H WINDOW</span></div>
+          <div id="flow-rows" class="flow-grid"><div class="empty-row">Waiting for volume sources…</div></div>
+          <p class="disclaimer">BTC uses Binance taker-buy versus estimated taker-sell quote volume. Gold and oil use candle-direction volume proxies where available. These are not net deposits or institutional capital flows.</p>
+        </section>
+
+        <section class="terminal-strip">
+          <div class="terminal-mark">⌘</div><div class="terminal-copy"><strong>Research terminal</strong><span>Search the assets currently returned by connected sources.</span></div>
+          <form id="terminal-form" class="terminal-form"><input id="terminal-query" type="text" placeholder="Try BTC, ETH, XAU/USD or a market symbol..." autocomplete="off" /><button class="btn btn-primary" type="submit">Search <span>→</span></button></form>
+          <div id="terminal-result" class="terminal-result" aria-live="polite"></div>
+        </section>
+
+        <section class="sources-section" id="sources">
+          <div class="sources-heading"><div><div class="eyebrow">TRANSPARENCY FIRST</div><h2>Connected data sources</h2></div><span id="source-updated">Checking feed status…</span></div>
+          <div class="source-grid">
+            <div class="source-item"><span class="source-logo fred-logo">F</span><span><b>FRED</b><small>USD · Treasury yields · WTI</small></span><em id="fred-status">Checking</em></div>
+            <div class="source-item"><span class="source-logo binance-logo">B</span><span><b>Binance</b><small>BTC / ETH spot quotes</small></span><em id="binance-status">Checking</em></div>
+            <div class="source-item"><span class="source-logo twelve-logo">12</span><span><b>Twelve Data</b><small>XAU/USD candles & indicators</small></span><em id="twelve-status">Checking</em></div>
+            <div class="source-item"><span class="source-logo news-logo">N</span><span><b>Official news feeds</b><small>Federal Reserve · U.S. BLS</small></span><em id="news-status">Checking</em></div>
+            <div class="source-item"><span class="source-logo cg-logo">C</span><span><b>CoinGecko</b><small>Top assets & provider quotes</small></span><em id="coingecko-status">Checking</em></div>
+            <div class="source-item"><span class="source-logo cmc-logo">M</span><span><b>CoinMarketCap / CoinStats</b><small>Independent provider coverage</small></span><em id="other-crypto-status">Checking</em></div>
           </div>
-          <div class="bubble-card">
-            <div class="bubble negative-bubble" id="bear-bubble" style="--fill:0%"><div><strong id="bear-count">0</strong><small>HEADLINES</small></div></div>
-            <div class="bubble-copy"><strong>Gold headwind</strong><span id="bear-fill">0% relative weight</span></div>
-          </div>
-          <div class="neutral-card"><span id="neutral-count">0</span><small>NEUTRAL / UNCLEAR</small></div>
-        </div>
-        <div class="sentiment-track"><span id="sentiment-track-bull"></span><span id="sentiment-track-bear"></span></div>
-        <div class="sentiment-foot"><strong id="sentiment-dominant">Waiting for news</strong><span id="sentiment-method">Source headlines pending</span></div>
-        <p class="mini-disclaimer">Hawkish is tagged as a potential gold headwind; dovish as potentially supportive. Context and expectations can reverse the actual market reaction.</p>
-      </article>
-      <article class="panel bias-panel">
-        <div class="panel-heading"><div><p class="eyebrow">MULTI-TIMEFRAME STRUCTURE</p><h2>Market bias matrix</h2><p class="muted">EMA 20 / EMA 50 + RSI 14 alignment</p></div><span class="info-tag">1H · 4H · 1D · 1W</span></div>
-        <div class="bias-table-wrap">
-          <table class="bias-table">
-            <thead><tr><th>ASSET</th><th>1H</th><th>4H</th><th>1D</th><th>1W</th></tr></thead>
-            <tbody id="bias-table"><tr><td colspan="5" class="loading-cell">Calculating from source candles…</td></tr></tbody>
-          </table>
-        </div>
-        <p class="mini-disclaimer">Bias is descriptive trend alignment, not a forecast or probability. Missing source intervals stay unavailable.</p>
-      </article>
-    </section>
+        </section>
 
-    <section class="main-grid">
-      <article class="panel chart-panel">
-        <div class="panel-heading"><div><p class="eyebrow">PRECIOUS METALS / SPOT</p><h2>Gold price history</h2><div class="chart-caption-row"><p id="chart-caption" class="muted">XAU/USD · Waiting for connected source</p><span id="chart-direction" class="chart-direction">--</span></div></div>
-          <div class="timeframes" role="group" aria-label="Chart interval">
-            <button class="tf" data-interval="15min">15m</button><button class="tf active" data-interval="1h">1H</button><button class="tf" data-interval="4h">4H</button><button class="tf" data-interval="1day">1D</button><button class="tf" data-interval="1week">1W</button>
-          </div>
-        </div>
-        <div class="chart-wrap"><canvas id="gold-chart" aria-label="Gold price line chart"></canvas><div id="chart-empty" class="chart-empty"><span class="empty-icon">⌁</span><strong>Gold data not connected</strong><span>Add TWELVE_DATA_API_KEY in Railway service variables to load XAU/USD candles.</span></div></div>
-        <div class="chart-foot"><span id="chart-source">SOURCE: TWELVE DATA · NOT CONNECTED</span><span id="chart-bars">0 BARS</span></div>
-      </article>
-
-      <article class="panel technical-panel">
-        <div class="panel-heading"><div><p class="eyebrow">QUANTITATIVE MEASUREMENTS</p><h2>Technical context</h2></div><span class="info-tag">DESCRIPTIVE</span></div>
-        <div class="technical-list">
-          <div class="measure"><span>EMA 20</span><strong id="ema20">—</strong><small>Shorter trend average</small></div>
-          <div class="measure"><span>EMA 50</span><strong id="ema50">—</strong><small>Longer trend average</small></div>
-          <div class="measure"><span>RSI · 14</span><strong id="rsi14">—</strong><small>Momentum oscillator</small></div>
-          <div class="measure"><span>ATR · 14</span><strong id="atr14">—</strong><small>Recent price range</small></div>
-        </div>
-        <div id="gold-note" class="notice">Gold measurements will appear when a data provider is connected.</div>
-      </article>
-    </section>
-
-    <section class="panel flow-panel">
-      <div class="panel-heading"><div><p class="eyebrow">MARKET PARTICIPATION / VOLUME PRESSURE</p><h2>Inflow vs outflow monitor</h2><p class="muted">Buy-side vs sell-side volume proxy by recent candle</p></div><span class="info-tag" id="flow-timeframe">1H WINDOW</span></div>
-      <div id="flow-rows" class="flow-rows"><div class="loading-cell">Waiting for volume sources…</div></div>
-      <p class="mini-disclaimer">BTC uses Binance taker-buy vs estimated taker-sell quote volume. XAU and OIL use up/down candle-volume proxies where volume is supplied. These are not net deposits or institutional capital flows.</p>
-    </section>
-
-    <section class="section-title"><div><p class="eyebrow">MACROECONOMIC BACKDROP</p><h2>Dollar, rates & energy</h2></div><span>Official daily observations · publication times vary</span></section>
-    <section class="macro-grid">
-      <article class="panel macro-card"><div class="card-top"><span>USD STRENGTH</span><span class="source-tag">DTWEXBGS</span></div><strong id="macro-usd">—</strong><p>Broad trade-weighted U.S. dollar index. This is not the ICE DXY contract.</p><small id="macro-usd-date">FRED · No observation loaded</small></article>
-      <article class="panel macro-card"><div class="card-top"><span>NOMINAL RATES</span><span class="source-tag">DGS10</span></div><strong id="macro-nominal">—</strong><p>10-year U.S. Treasury constant-maturity yield.</p><small id="macro-nominal-date">FRED · No observation loaded</small></article>
-      <article class="panel macro-card"><div class="card-top"><span>REAL RATES</span><span class="source-tag">DFII10</span></div><strong id="macro-real">—</strong><p>10-year inflation-indexed Treasury yield.</p><small id="macro-real-date">FRED · No observation loaded</small></article>
-      <article class="panel macro-card"><div class="card-top"><span>ENERGY</span><span class="source-tag">DCOILWTICO</span></div><strong id="macro-oil">—</strong><p>West Texas Intermediate crude spot benchmark.</p><small id="macro-oil-date">FRED · No observation loaded</small></article>
-    </section>
-
-    <section class="bottom-grid">
-      <article class="panel news-panel"><div class="panel-heading"><div><p class="eyebrow">PRIMARY-SOURCE NEWSWIRE</p><h2>Policy & economic releases</h2></div><span class="info-tag">OFFICIAL FEEDS</span></div><div id="news-list" class="news-list"><div class="loading-row">Loading Federal Reserve and BLS headlines…</div></div></article>
-      <article class="panel watch-panel"><div class="panel-heading"><div><p class="eyebrow">CROSS-ASSET SNAPSHOT</p><h2>Digital assets</h2></div><span class="source-tag">PUBLIC SPOT DATA</span></div><div class="watch-row"><div><strong>BTC / USDT</strong><small>24-hour rolling change</small></div><strong id="watch-btc">—</strong><span id="watch-btc-pct" class="change">—</span></div><div class="watch-row"><div><strong>ETH / USDT</strong><small>24-hour rolling change</small></div><strong id="watch-eth">—</strong><span id="watch-eth-pct" class="change">—</span></div><div class="source-list"><span>CONNECTED SOURCES</span><div id="source-status"><i></i> Federal Reserve RSS <b>Checking</b></div><div id="bls-status"><i></i> U.S. BLS RSS <b>Checking</b></div><div id="binance-status"><i></i> Binance spot ticker <b>Checking</b></div><div id="yahoo-status"><i></i> WTI futures history <b>Checking</b></div></div></article>
-    </section>
-
-    <section class="disclaimer"><strong>DATA & SCOPE</strong><span>This is a read-only research dashboard. It does not generate buy/sell instructions, position sizing, guaranteed probabilities, or broker orders. Macro series are published on their own schedules; crypto data is a rolling 24-hour snapshot. A feed failure is shown as unavailable, never replaced with invented values.</span></section>
-    <footer><span>NORDXAU.GPT · RESEARCH CONSOLE 0.2</span><span>Evidence first · source timestamps preserved · execution disabled</span><a href="/docs" target="_blank" rel="noreferrer">API reference ↗</a></footer>
-  </main>
+        <footer class="page-footer"><span>© NORDXAU.GPT · MARKET INTELLIGENCE</span><span>Evidence first · source timestamps preserved · execution disabled</span><a href="/docs" target="_blank" rel="noreferrer">API reference ↗</a></footer>
+      </div>
+    </main>
+  </div>
   <script src="/assets/app.js"></script>
 </body>
 </html>
