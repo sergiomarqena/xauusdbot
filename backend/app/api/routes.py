@@ -2,6 +2,7 @@ from collections import defaultdict, deque
 from datetime import datetime, timezone
 import time
 
+import httpx
 from fastapi import APIRouter, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 
