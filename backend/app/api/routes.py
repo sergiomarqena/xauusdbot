@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException, Query
 
 from app.config import get_settings
+from app.data.crypto_aggregator import get_crypto_market_overview
 from app.data.demo import DemoMarketDataProvider
 from app.data.twelvedata import TwelveDataError, TwelveDataProvider
 from app.domain.models import CandleSet, ProviderStatus
@@ -153,3 +154,9 @@ async def terminal_snapshot(
         "gold": gold,
         **context,
     }
+
+
+@router.get("/crypto/market-overview")
+async def crypto_market_overview():
+    """Return separate, source-labelled quotes from configured public crypto data providers."""
+    return await get_crypto_market_overview()
