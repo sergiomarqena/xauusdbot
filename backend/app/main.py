@@ -15,9 +15,17 @@ app = FastAPI(
 )
 app.include_router(router)
 
-ROOT_DIR = Path(__file__).resolve().parents[2]
-FRONTEND_DIR = ROOT_DIR / "frontend"
-app.mount("/assets", StaticFiles(directory=FRONTEND_DIR), name="assets")
+# Railway builds from /backend, so the repo-level frontend is outside the image.
+# Prefer a bundled backend/frontend copy; retain repo-root fallback for local/full-repo runs.
+_APP_DIR = Path(__file__).resolve().parent
+_FRONTEND_CANDIDATES = [
+    _APP_DIR.parent / "frontend",
+    _APP_DIR.parents[1] / "frontend",
+]
+FRONTEND_DIR = next((path for path in _FRONTEND_CANDIDATES if path.is_dir()), None)
+
+if FRONTEND_DIR is not None:
+    app.mount("/assets", StaticFiles(directory=FRONTEND_DIR), name="assets")
 
 
 @app.get("/health")
@@ -27,4 +35,6 @@ async def health():
 
 @app.get("/", include_in_schema=False)
 async def dashboard():
-    return FileResponse(FRONTEND_DIR / "index.html")
+    if FRONTEND_DIR is not None and (FRONTEND_DIR / "index.html").is_file():
+        return FileResponse(FRONTEND_DIR / "index.html")
+    return {"status": "ok", "service": settings.app_name, "detail": "frontend not bundled"}
