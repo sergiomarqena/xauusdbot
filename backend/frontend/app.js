@@ -536,6 +536,35 @@ function tick() {
 }
 
 $("refresh").addEventListener("click", loadDashboard);
+
+$("analyst-form").addEventListener("submit", async event => {
+  event.preventDefault();
+  const question = $("analyst-question").value.trim();
+  if (question.length < 3) return;
+  const button = $("analyst-form").querySelector("button[type=submit]");
+  const output = $("analyst-response");
+  button.disabled = true;
+  button.textContent = "Analysing…";
+  output.classList.add("loading");
+  output.textContent = "Sending the latest server-verified market snapshot to Gemini…";
+  try {
+    const response = await fetch("/api/v1/analyst/ask", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({question})
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.detail || "AI Analyst request failed.");
+    output.textContent = result.answer + "\\n\\nModel: " + result.model + " · Snapshot: " + safeDate(result.market_snapshot_at);
+    output.classList.remove("loading");
+  } catch (error) {
+    output.textContent = error.message;
+    output.classList.remove("loading");
+  } finally {
+    button.disabled = false;
+    button.innerHTML = 'Ask Gemini <span>→</span>';
+  }
+});
 document.querySelectorAll(".tf").forEach(button => button.addEventListener("click", () => {
   document.querySelectorAll(".tf").forEach(node => node.classList.remove("active"));
   button.classList.add("active");
