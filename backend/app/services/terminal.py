@@ -15,6 +15,7 @@ import httpx
 
 from app.analytics.indicators import indicator_summary
 from app.config import get_settings
+from app.data.crypto_aggregator import get_crypto_market_overview
 from app.data.twelvedata import TwelveDataError, TwelveDataProvider
 from app.domain.models import Candle
 
@@ -506,10 +507,12 @@ async def build_terminal_snapshot(
     headlines.sort(key=lambda item: item.get("published_at") or "", reverse=True)
     sentiment = _build_sentiment(headlines)
     bias, flow = await _asset_bias_and_flow(selected_interval, selected_gold)
+    crypto_sources = await get_crypto_market_overview()
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "macro": list(macro),
         "crypto": list(crypto),
+        "crypto_sources": crypto_sources,
         "news": sentiment["headlines"][:12],
         "sentiment": {key: value for key, value in sentiment.items() if key != "headlines"},
         "bias": bias,
