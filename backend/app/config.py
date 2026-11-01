@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     coingecko_api_key: str = ""
     coinmarketcap_api_key: str = ""
     coinstats_api_key: str = ""
+    gemini_api_key: str = ""
+    gemini_model: str = "gemini-3.5-flash-lite"
     default_symbol: str = "XAU/USD"
     default_interval: str = "1h"
     candle_limit: int = Field(default=200, ge=60, le=5000)
