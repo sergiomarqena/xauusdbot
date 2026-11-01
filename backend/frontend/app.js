@@ -555,7 +555,7 @@ $("analyst-form").addEventListener("submit", async event => {
     });
     const result = await response.json();
     if (!response.ok) throw new Error(result.detail || "AI Analyst request failed.");
-    output.textContent = result.answer + "\\n\\nModel: " + result.model + " · Snapshot: " + safeDate(result.market_snapshot_at);
+    output.textContent = result.answer + "\n\nModel: " + result.model + " · Snapshot: " + safeDate(result.market_snapshot_at);
     output.classList.remove("loading");
   } catch (error) {
     output.textContent = error.message;
