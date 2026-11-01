@@ -115,6 +115,12 @@
             <div class="analyst-summary" id="analyst-summary">Collecting verified market data to build a source-led overview.</div>
             <div class="analyst-metrics"><div><span>NEWS SUPPORT</span><strong id="analyst-bull">—</strong></div><div><span>NEWS HEADWIND</span><strong id="analyst-bear">—</strong></div></div>
             <div class="analyst-tags"><span class="tag-bull">↗ Supportive</span><span class="tag-neutral">• Neutral</span><span class="tag-bear">↘ Headwind</span></div>
+            <form id="analyst-form" class="analyst-chat">
+              <label for="analyst-question">Ask about the current market</label>
+              <textarea id="analyst-question" rows="2" maxlength="1200" placeholder="e.g. Summarise the latest gold and macro context..." required></textarea>
+              <button class="btn btn-primary analyst-submit" type="submit">Ask Gemini <span>→</span></button>
+            </form>
+            <div id="analyst-response" class="analyst-response" aria-live="polite">AI analysis will appear here after you ask a question.</div>
             <a class="analyst-link" href="#research-context">View research basis <span>→</span></a>
             <p class="analyst-note">Transparent source and indicator context. This panel is not an autonomous AI forecast.</p>
           </article>
